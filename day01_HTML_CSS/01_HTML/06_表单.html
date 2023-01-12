@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="01_基础标签.html" method="get">
+
+        用户名：<input type="text" name="username" value=""/><br/>
+        密码：<input type="password" name="abc" value=""/><br/>
+        性别：<input type="radio" name="gender" value="0"/>   男
+             <input type="radio" name="gender" value="1" checked/>    女<br/>
+        生日：<input type="date"><br/>
+        地址：<select name="address">
+                <option value="bj">北京市</option>
+                <option value="hb">河北省</option>
+                <option value="hn" selected="selected">河南省</option>
+                <option>山西省</option>
+              </select>省
+        <select>
+            <option>海淀区</option>
+            <option selected>昌平区</option>
+            <option>石家庄市</option>
+            <option>保定市</option>
+        </select>  市 县<br/>
+        爱好：<input type="checkbox" name="hobby" value="唱跳">  唱跳
+            <input type="checkbox" name="hobby" value="打球">打球
+            <input type="checkbox" name="hobby" value="唱K">唱K
+            <input type="checkbox" name="hobby">滑雪
+            <input type="checkbox" name="hobby">打游戏
+            <input type="checkbox" name="hobby">java<br/>
+        上传文件：<input type="file" name="file"><br/>
+        个人简介：
+            <textarea name=""></textarea><br/>
+        隐藏域：<input type="hidden" name="aaa" value="bbb"><br/>
+        <input type="button" value="按钮上的文字">
+        <button type="button">按钮上的文字</button>
+        <input type="submit" value="提交按钮">
+        <button type="submit">提交按钮</button>
+        <input type="reset" value="重置按钮">
+        <button type="reset">重置按钮</button>
+    </form>
+</body>
+</html>
