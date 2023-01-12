@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="@{/}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>root</h1>
+Employee:
+<div th:text="${emp}"></div>
+<div th:text="${emp.id}"></div>
+<div th:text="${emp.name}"></div>
+<div th:text="${emp.gender}"></div>
+<div th:text="${emp.salary}"></div>
+<div th:text="${emp.value}"></div>
+
+Employee02:
+<div th:text="${emp02}"></div>
+<div th:text="${emp02.id}"></div>
+<div th:text="${emp02.name}"></div>
+<div th:text="${emp02.gender}"></div>
+<div th:text="${emp02.salary}"></div>
+<div th:text="${emp02.computer}"></div>
+<div th:text="${emp02.computer.id}"></div>
+<div th:text="${emp02.computer.brand}"></div>
+<div th:text="${emp02.computer.price}"></div>
+
+names:
+<div th:text="${names}"></div>
+<div th:text="${names[0]}"></div>
+<div th:text="${names[1]}"></div>
+
+emps:
+<div th:text="${emps}"></div>
+<div th:text="${emps[0].id}"></div>
+<div th:text="${emps[0].name}"></div>
+<div th:text="${emps[0].gender}"></div>
+<div th:text="${emps[0].salary}"></div>
+<div th:text="${emps[1].id}"></div>
+<div th:text="${emps[1].name}"></div>
+
+map:
+<div th:text="${map}"></div>
+<div th:text="${map.emp01}"></div>
+<div th:text="${map.emp01.id}"></div>
+<div th:text="${map.emp01.name}"></div>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="@{/}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>admin</h2>
+<p th:text="${msg}"></p>
+<!--application是固定的，应用域固定的！名字不变-->
+<p th:text="${application.applicationMsg}"></p>
+请求参数:
+<p th:text="${param.id}"></p>
+<p th:text="${param.name}"></p>
+<p th:text="${param.hobby}"></p>
+<p th:text="${param.hobby[0]}"></p>
+<p th:text="${param.hobby[1]}"></p>
+<p th:text="${param.hobby[2]}"></p>
+内置对象：
+<p th:text="${#request.getContextPath()}"></p>
+<p th:text="@{/}"></p>
+<p th:text="${#request.getParameter('id')}"></p>
+<p th:text="${param.id}"></p>
+<p th:text="${#servletContext.getAttribute('applicationMsg')}"></p>
+<p th:text="${application.applicationMsg}"></p>
+String 中的方法：
+<p th:text="${#strings.length(msg)}"></p>
+<p th:text="${#strings.length(application.applicationMsg)}"></p>
+<p th:text="${#strings.isEmpty(application.applicationMsg)}"></p>
+<p th:text="${#strings.contains(application.applicationMsg,'应用域')}"></p>
+<p th:text="${#strings.contains(application.applicationMsg,'应用域1')}"></p>
+Array:
+<p th:text="${#arrays.length(names)}"></p>
+<p th:text="${#arrays.contains(names,'java')}"></p>
+<p th:text="${#arrays.isEmpty(names)}"></p>
+List:
+<p th:text="${#lists.size(list)}"></p>
+<p th:text="${#lists.isEmpty(list)}">
+<p th:text='${#lists.contains(list,"a")}'></p>
+</body>
+</html>
