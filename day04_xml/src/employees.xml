@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--没有约束文件，标签和属性都随便写-->
+<employees>
+    <employee id="101">
+        <name>张三</name>
+        <age>22</age>
+        <address>北京</address>
+    </employee>
+    <employee id="102">
+        <name>李四</name>
+        <age>20</age>
+        <address>杭州</address>
+    </employee>
+    <employee id="103">
+        <name>王五</name>
+        <age>21</age>
+        <address>上海</address>
+    </employee>
+</employees>
