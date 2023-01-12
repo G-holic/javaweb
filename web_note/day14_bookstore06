@@ -1,0 +1,303 @@
+1. 书城项目第六阶段
+    1.1 通过过滤器处理乱码问题
+        请求乱码和响应乱码(目前是在BaseServlet中去实现的-->要求：自己的Servlet必须继承BaseServlet)
+        ① 创建一个过滤器EncodingFilter
+            @WebFilter(filterName = "EncodingFilter",urlPatterns = "/*")
+            public class EncodingFilter implements Filter {
+                public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
+                    req.setCharacterEncoding("utf-8");//处理post请求乱码
+                    resp.setContentType("text/html;charset=utf-8");//处理响应乱码
+                    chain.doFilter(req, resp);//100%放行
+                }
+                public void init(FilterConfig config) throws ServletException {
+
+                }
+                public void destroy() {
+                }
+            }
+    1.2 去结账的准备工作
+        说明：将购物车内所有图书都结账
+        a、分析：
+            购物车对应现在的订单，购物项对应现在的订单项
+            ① 结账就会生成订单(订单是一个)，订单中有什么信息？
+                主键：唯一标识
+                订单号：  后台生成一个唯一标识(订单的唯一标识)
+                订单时间：点击去结账时的系统时间
+                订单金额：购物车的总金额
+                订单数量：购物车的总数量
+                订单状态：等待发货、已发货、确认收货
+                用户id:记录当前订单属于哪个用户(外键)   要求必须处于登录状态
+            ② 分析订单项
+                主键：唯一标识
+                书的图片
+                书的书名
+                书的价格
+                书的数量
+                书的金额
+                订单的id: 记录当前订单项属于哪个订单
+            订单和订单项的数据应该存储在哪里？数据库
+        b、创建表格
+            CREATE TABLE t_order(
+            	order_id INT PRIMARY KEY AUTO_INCREMENT,
+            	order_sequence VARCHAR(200),
+            	create_time VARCHAR(100),
+            	total_count INT,
+            	total_amount DOUBLE,
+            	order_status INT,
+            	user_id INT
+            );
+            CREATE TABLE t_order_item(
+            	item_id INT PRIMARY KEY AUTO_INCREMENT,
+            	book_name VARCHAR(20),
+            	price DOUBLE,
+            	img_path VARCHAR(50),
+            	item_count INT,
+            	item_amount DOUBLE,
+            	order_id VARCHAR(20)
+            );
+        c、创建JavaBean
+            public class OrderItem {
+                private Integer itemId;
+                private String bookName;
+                private Double price;
+                private String imgPath;
+                private Integer itemCount;
+                private Double itemAmount;
+                private Integer orderId;
+            }
+            public class Order {
+                private Integer orderId;
+                private String orderSequence;
+                private String createTime;
+                private Integer totalCount;
+                private Double totalAmount;
+                private Integer orderStatus;
+                private Integer userId;
+            }
+    1.3 去结账功能的实现
+        ① 找到去结账的位置
+            <a class="pay" href="order?flag=createOrder">去结账</a>
+        ② 创建OrderServlet,创建createOrder方法
+            @WebServlet(name = "OrderServlet",value = "/order")
+            public class OrderServlet extends BaseServlet {
+                private OrderService orderService=new OrderServiceImpl();
+                protected void createOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                    //处理结账的请求
+                    //1. 获得请求参数(获得结账相关的数据)
+                    //购物车(n个购物项，总数量，总金额)
+                    HttpSession session = request.getSession();
+                    Cart cart = (Cart)session.getAttribute("cart");
+                    //当前登录人的信息(手动保持一点，登录后在点击去结账)
+                    User user = (User)session.getAttribute("user");//如果没有登录user是null
+                    //2. 调用业务层处理业务
+                    //订单的保存、订单项的保存，这些操作是在Servlet内实现吗？不是的，业务层就是专门搞业务的
+                    String orderSequence = orderService.createOrder(cart, user);
+                    //把购物车清空一下
+                    session.removeAttribute("cart");
+                    //3. 给响应
+                    //需要将订单号，放在请求域，转发到网页，通过thymeleaf渲染
+                    request.setAttribute("orderSequence",orderSequence);
+                    this.processTemplate("cart/checkout",request,response);
+                }
+            }
+        ③ 创建OrderService
+            public class OrderServiceImpl implements OrderService {
+                private OrderDao orderDao=new OrderDaoImpl();
+                private OrderItemDao orderItemDao=new OrderItemDaoImpl();
+                private BookDao bookDao=new BookDaoImpl();
+                @Override
+                public String createOrder(Cart cart, User user) {
+                    //1. 创建订单信息并保存到数据库
+                    String orderSequence="SGG"+System.currentTimeMillis();//订单编号
+                    Date date = new Date();
+                    //对当前系统时间进行格式化
+                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String format = sdf.format(date);//字符串格式的当前系统时间
+                    Order order=new Order(null,orderSequence,format,cart.getTotalCount(),cart.getTotalAmount(),0,user.getId());
+                    //调用dao层将order的数据添加到数据库内
+                    orderDao.addOrder(order);
+                    //2. 创建n个订单项信息并保存到数据库(订单项是有很多个 1.批处理 2.循环)
+                    //通过循环的方式去实现
+                    //订单id是根据订单编号去查询(框架阶段，是可以在新增的时候，返回自增的id的)
+                    Integer idBySequence = orderDao.findIdBySequence(orderSequence);
+                    Collection<CartItem> allCartItem = cart.getAllCartItem();
+                    for (CartItem item : allCartItem) {
+                        //一个item(购物项)对应一个订单项(OrderItem)
+                        OrderItem orderItem = new OrderItem(null,item.getBook().getBookName(),item.getBook().getPrice(),item.getBook().getImgPath(),item.getCount(),item.getAmount(),idBySequence);
+                        //调用dao层将orderItem的数据保存到数据库
+                        orderItemDao.addOrderItem(orderItem);
+                        //3. 对图书的库存和销量进行修改操作(暂时不考虑库存不足的情况)
+                        //每一个订单项的生成都随之改变当前书的库存和销量
+                        Book book = item.getBook();//这就是需要修改信息的那本书
+                        book.setSales(book.getSales()+item.getCount());
+                        book.setStock(book.getStock()-item.getCount());
+                        bookDao.updateBook(book);//根据书的id修改其他信息
+                    }
+                    return orderSequence;//需要把订单号返给Servlet
+                }
+            }
+        ④ 创建OrderDao
+            public class OrderDaoImpl extends BaseDaoImpl implements OrderDao {
+                @Override
+                public void addOrder(Order order) {
+                    String sql="insert into t_order values(null,?,?,?,?,?,?)";
+                    this.update(sql,order.getOrderSequence(),order.getCreateTime(),order.getTotalCount(),order.getTotalAmount(),order.getOrderStatus(),order.getUserId());
+                }
+                @Override
+                    public Integer findIdBySequence(String orderSequence) {
+                        String sql="select order_id from t_order where order_sequence=?";
+                        return (Integer)this.getValue(sql,orderSequence);
+                    }
+            }
+        ⑤ 创建OrderItemDao
+            public class OrderItemDaoImpl extends BaseDaoImpl implements OrderItemDao {
+                @Override
+                public void addOrderItem(OrderItem orderItem) {
+                    String sql="insert into t_order_item values(null,?,?,?,?,?,?)";
+                    this.update(sql,orderItem.getBookName(),orderItem.getPrice(),orderItem.getImgPath(),orderItem.getItemCount(),orderItem.getItemAmount(),orderItem.getOrderId());
+                }
+            }
+    1.4 我的订单
+        ① 找到我的订单位置(购物车(cart.html)页面、结算完成(checkout.html)页面)
+            <a href="order?flag=showOrders">我的订单</a>
+        ② 去OrderServlet创建showOrders方法
+            protected void showOrders(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                    //1. 获得到当前登录人的对象(根据当前登录人的id值去数据查询)   先登录-->点击我的订单
+                    User user = (User)request.getSession().getAttribute("user");
+                    //2. 调用业务层处理业务
+                    List<Order> allOrder = orderService.findAllOrder(user.getId());
+                    //3. 给响应
+                    request.setAttribute("orders",allOrder);
+                    this.processTemplate("order/order",request,response);
+                }
+        ③ OrderService
+             @Override
+                public List<Order> findAllOrder(Integer userId) {
+                    return orderDao.findAllOrder(userId);
+                }
+        ④ OrderDao
+            @Override
+                public List<Order> findAllOrder(Integer userId) {
+                    String sql="select order_id orderId,order_sequence orderSequence,create_time createTime,total_count totalCount,total_amount totalAmount,order_status orderStatus,user_id userId  from t_order where user_id=?";
+                    return this.getList(Order.class,sql,userId);
+                }
+    1.5 检查登录状态
+            对去结账功能和我的订单功能做检查工作(去结账、我的订单功能必须处于登录状态)
+        ① 创建LoginFilter
+            @WebFilter(filterName = "LoginFilter",value = "/order")
+            public class LoginFilter implements Filter {
+                public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
+                    //处于登录状态，放行，不处于登录状态让页面跳转至登录页面
+                    //如何验证是否处于登录状态，查看session中是否存在User对象
+                    HttpServletRequest request=(HttpServletRequest)req;
+                    HttpServletResponse response=(HttpServletResponse)resp;
+                    HttpSession session = request.getSession();
+                    Object user = session.getAttribute("user");
+                    if(user==null){
+                        //说明不处于登录状态，页面跳转至登录页面(如何跳转？)
+                        //重定向过去即可
+                        response.sendRedirect(request.getContextPath()+"/user?flag=toLoginPage");
+                    }else{
+                        //说明处于登录状态，放行
+                        chain.doFilter(req, resp);//放行的代码
+                    }
+                }
+                public void init(FilterConfig config) throws ServletException {
+
+                }
+                public void destroy() {
+                }
+
+            }
+    1.6 结账功能的事务问题
+        目前的结账功能是存在事务问题！
+        事务四个特性：
+            原子性：不可分割
+            一致性：事务前后状态保持一致性(库存100本)
+            隔离性：事务和事务之间勋在隔离界别
+            持久性：持久化
+        操作：
+            在createOrder方法中添加事务处理的代码
+            //1. 将数据库连接的提交方式设置为手动提交
+            try{
+                结账的业务代码(对数据库进行n次操作-->新增订单，新增订单项，修改图书)
+                都是用刚才的数据库连接
+                ...
+                ...
+                ...
+
+                如果能运行到try的最末尾，说明没有异常产生，就对该数据库连接做提交
+            }catch(Exception e){
+                //如果执行此处代码，说明有异常产生，就回滚
+            }finally{
+                关闭资源
+            }
+
+            我们这个项目，只有一个地方，就是结账功能
+            以后我们的项目，会有很多处需要添加事务(每个方法都写一个try-catch,太多了)
+            通过过滤器去解决该问题！
+        实现步骤：
+            ① 创建TransactionFilter
+                @WebFilter(filterName = "TransactionFilter",urlPatterns = "/*")
+                public class TransactionFilter implements Filter {
+                    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
+                        //1. 获得数据库连接
+                        Connection connection = JDBCTools.getConnection();
+                        try {
+                            //2. 设置为手动提交
+                            connection.setAutoCommit(false);
+                            //3. 放行
+                            chain.doFilter(req,resp);
+                            //4. 如果运行到此处没有异常产生，则提交
+                            connection.commit();
+                        } catch (Exception e) {//异常捕获类型是最大的(什么异常都可以捕获)
+                            e.printStackTrace();
+                            //5. 如果程序走到这里，说明有异常产生
+                            try {
+                                connection.rollback();
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
+                            }
+                        } finally {
+                            //6. 不管有没有异常产生，释放资源是100%要执行的
+                            JDBCTools.releaseConnection();
+                        }
+                    }
+                    public void init(FilterConfig config) throws ServletException {
+                    }
+                    public void destroy() {
+                    }
+
+                }
+            ② 保证释放之后，对数据库的所有操作，都是用同一个数据库连接
+                要求：整个过程中不能释放数据库连接，等到再回到过滤器的时候释放
+            ③ 放行之后，不能有异常被try-catch,都必须向上抛出
+                BaseServlet
+                    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                            //1. 获得flag的参数，进行判断
+                            String flag = request.getParameter("flag");
+                            //通过反射获得想要调用的方法对象
+                            Class c = this.getClass();//c就是子类的类信息
+                            try {
+                                Method method = c.getDeclaredMethod(flag, HttpServletRequest.class, HttpServletResponse.class);
+                                //调用这个函数
+                                method.setAccessible(true);//暴力访问
+                                method.invoke(this,request,response);
+                            } catch (Exception e) {
+                                e.printStackTrace();//建议不删，可以打印错误信息(删除则没有)
+                                throw new RuntimeException(e);//如果出现异常，手动抛出运行时异常
+                            }
+                        }
+            难度系数很高：很值得研究
+
+
+
+
+
+
+
+
+
+
+
+
