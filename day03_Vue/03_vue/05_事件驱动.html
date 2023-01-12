@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="button" value="按钮" @click="clickTest(10,'java',true,false)"/><br/>
+        <input type="text" @change="changeTest">
+    </div>
+    <script>
+        new Vue({
+            el:"#app",
+            data:{},
+            methods:{
+                clickTest:function (a,b,c) {
+                    alert("点击事件绑定成功"+a+b+c)
+                },
+                changeTest() {
+                    alert("值改变事件绑定成功123")
+                }
+            }
+        })
+    </script>
+</body>
+</html>

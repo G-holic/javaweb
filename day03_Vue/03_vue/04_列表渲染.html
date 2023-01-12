@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <ul>
+            <li v-for="hobby in hobbys">{{hobby}}</li>
+        </ul>
+        <input type="button" value="按钮" @click="addHobby">
+        <table>
+            <tr>
+                <th>索引</th>
+                <th>编号</th>
+                <th>品牌</th>
+                <th>价钱</th>
+            </tr>
+            <tr v-for="(computer,index) in computers">
+                <td>{{index+1}}</td>
+                <td>{{computer.id}}</td>
+                <td>{{computer.brand}}</td>
+                <td>{{computer.price}}</td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        new Vue({
+            el:"#app",
+            data:{
+                hobbys:["java","抖音","大数据","前端","UI","快手"],
+                computers:[
+                    {
+                        id:101,
+                        brand:"联想",
+                        price:5000
+                    },{
+                        id:102,
+                        brand:"外星人",
+                        price:15000
+                    },{
+                        id:103,
+                        brand:"诺基亚",
+                        price:6000
+                    }]
+            },
+            methods:{
+                addHobby:function () {
+                    this.hobbys.push("看电影")
+                }
+            }
+        })
+    </script>
+</body>
+</html>

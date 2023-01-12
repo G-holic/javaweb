@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="vue.js"></script>
+
+</head>
+<body>
+<div id="app">
+    <p>尊姓：{{firstName}}</p>
+    <p>大名：{{lastName}}</p>
+    <input type="text" v-model="firstName"><br/>
+    <input type="text" v-model="lastName"><br/>
+    <p>全名：{{fullName}}</p>
+</div>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            firstName: "詹姆斯",
+            lastName: "哈登",
+            fullName: "詹姆斯.哈登"
+        },
+        methods: {},
+        watch: {
+            firstName: function () {
+                this.fullName = this.firstName + "." + this.lastName
+            },
+            lastName: function () {
+                this.fullName = this.firstName + "." + this.lastName
+            },
+        }
+    })
+</script>
+</body>
+</html>

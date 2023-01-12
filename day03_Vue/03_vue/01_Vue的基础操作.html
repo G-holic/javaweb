@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div>{{msg}}</div>
+        <p>{{msg}}</p>
+        <a :href="username">{{aMsg}}</a>
+        <input type="text" v-model.trim="username"/><br/>
+        <input type="button" value="操作文本框中的内容" @click="getValue"/>
+    </div>
+    <script>
+        new Vue({
+            "el":"#app",//el是选择Vue可操作的区域
+            "data":{
+                "msg":"div的内容123",
+                "aMsg":"点我",
+                "username":"admin"
+            },//设置数据模型
+            "methods":{
+                "getValue":function () {
+                    alert(this.username);
+                    //this.username="root"
+                }
+            }
+        });
+    </script>
+</body>
+</html>

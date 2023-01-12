@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="button" value="按钮" onclick="regTest()">
+<script>
+    function regTest() {
+        /*var reg = /o/g; // 加了g是全文匹配
+        var str = "Hello World";
+        // 1.验证str中是否包含o字母
+        var b = reg.test(str);
+        // alert(b)
+
+        // 2.匹配提取
+        var regExpMatchArray = str.match(reg);
+        console.log(regExpMatchArray);
+        console.log(regExpMatchArray.length);
+        console.log(regExpMatchArray[0]);
+        console.log(regExpMatchArray[1]);
+
+
+        //3. 匹配替换
+        var s = str.replace(reg,"a");
+        console.log(s)
+        console.log(str)*/
+
+        //密码的要求：8位以上字母+数字+_
+        var passwprdReg=/^[a-zA-Z0-9_]{8,20}$/;
+        var str="admin123456";
+        var b = passwprdReg.test(str);
+        // alert(b)
+        //alert(b);
+        //用户名：6-20 字母+数字
+        var usernameReg=/^[a-zA-Z0-9]{6,20}$/
+        var username="root1";
+        var b1 = usernameReg.test(username);
+        //alert(b1)
+        // 邮箱的正则
+        var emailReg=/^[a-zA-Z0-9_\.-]+@([a-zA-Z0-9-]+[\.]{1})+[a-zA-Z]+$/;
+        var email="abc@.com";
+        var b2 = emailReg.test(email);
+        alert(b2)
+        // 手机号
+        // 身份证号
+    }
+</script>
+</body>
+</html>

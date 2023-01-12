@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div>{{msg}}</div>
+        <input type="button" value="获得div中的内容" @click="getText"/>
+        <input type="button" value="设置div中的内容" @click="setText"/>
+    </div>
+    <script>
+        new Vue({
+            "el":"#app",//el是选择Vue可操作的区域
+            "data":{
+                "msg":"div的内容123"
+            },//设置数据模型
+            "methods":{
+                "getText":function () {
+                    alert(this.msg)
+                },
+                "setText":function () {
+                    this.msg="Vue设置的新值"
+                }
+            }
+        });
+    </script>
+
+    <!--<div id="div01">div的内容</div>
+    <input type="button" value="获得div中的内容" onclick="getText()"/>
+    <input type="button" value="设置div中的内容" onclick="setText()"/>
+    <script>
+        function getText() {
+            var elementById = document.getElementById("div01");
+            console.log(elementById.innerText)
+        }
+        function setText() {
+            var elementById = document.getElementById("div01");
+            elementById.innerText="新值"
+        }
+    </script>-->
+</body>
+</html>

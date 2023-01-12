@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <a href="http://baidu.com" @click.prevent="clickTest">点击跳转至百度</a>
+        <form action="01_HelloWorld.html" method="" @submit.prevent="subitTest">
+            <input type="text" name="username"/><br/>
+            <input type="submit" >
+        </form>
+    </div>
+    <script>
+        new Vue({
+            el:"#app",
+            data:{},
+            methods:{
+                clickTest:function () {
+                    alert("点击了超链接");
+                    //如果你不想让超链接进行跳转
+                    //event.preventDefault();//取消控件的默认行为
+                },
+                subitTest:function () {
+                    alert("表单即将被提交");
+                    //event.preventDefault();//取消控件的默认行为
+                }
+            }
+        })
+    </script>
+</body>
+</html>

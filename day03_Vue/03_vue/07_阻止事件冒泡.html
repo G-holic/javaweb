@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="vue.js"></script>
+    <style>
+        #div1{
+            border: 1px solid red;
+            width: 300px;
+            height: 300px;
+        }
+        #div2{
+            border: 1px solid blue;
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div id="div1" @click="div1Test">
+            <div id="div2" @click.stop="div2Test"></div>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el:"#app",
+            data:{},
+            methods:{
+                div1Test:function () {
+                    alert("点击了大框");
+                },
+                div2Test:function () {
+                    alert("点击了小框");
+                    // event.stopPropagation();//阻止事件冒泡
+                }
+            }
+        })
+    </script>
+</body>
+</html>

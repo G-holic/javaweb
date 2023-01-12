@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <div id="div1">{{msg}}</div>
+</div>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            msg: "div的内容123"
+        },
+        methods: {
+            fun01: function () {
+                console.log("这是fun01函数")
+            }
+        },
+        watch: {},
+        beforeCreate: function () {
+            console.log("Vue对象初始化前执行...");
+            console.log(this.msg);
+            this.fun01();
+        },
+        created: function () {
+            console.log("Vue对象初始化后执行...");
+            console.log(this.msg);
+            this.fun01();
+        },
+        beforeMount: function () {
+            console.log("Vue对象渲染前执行...");
+            console.log(document.getElementById("div1").innerText);//{{msg}}
+        },
+        mounted: function () {
+            console.log("Vue对象渲染后执行...");
+            console.log(document.getElementById("div1").innerText);//div中的内容
+        }
+    });
+</script>
+
+</body>
+</html>
