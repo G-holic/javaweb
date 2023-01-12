@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="@{/}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table border="1" width="500px" align="center">
+    <tr>
+        <td colspan="5" align="center">所有士兵信息</td>
+    </tr>
+    <tr>
+        <th>编号</th>
+        <th>姓名</th>
+        <th>武器</th>
+        <th>删除</th>
+        <th>编辑</th>
+    </tr>
+    <tr th:if="${#lists.isEmpty(soldiers)}">
+        <td  colspan="5" align="center">
+            <b>没有士兵信息，请添加！</b>
+        </td>
+    </tr>
+    <tr th:unless="${#lists.isEmpty(soldiers)}" th:each="soldier,status : ${soldiers}">
+        <td th:text="${soldier.soldierId}"></td>
+        <td th:text="${soldier.soldierName}"></td>
+        <td th:text="${soldier.soldierWeapon}"></td>
+        <td>
+            <a th:href="@{/deleteSoldier(id=${soldier.soldierId})}">删除</a>
+        </td>
+        <td>
+            <a th:href="@{/toUpdate(id=${soldier.soldierId})}">编辑</a>
+        </td>
+    </tr>
+</table>
+
+<a href="toAddSoldier">添加士兵信息</a>
+</body>
+</html>

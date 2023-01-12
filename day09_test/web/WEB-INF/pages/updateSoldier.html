@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="@{/}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="update" method="post">
+    <input type="hidden" name="soldierId" th:value="${soldier.soldierId}">
+    姓名：<input type="text" name="soldierName"  th:value="${soldier.soldierName}"/><br/>
+    武器：<input type="text" name="soldierWeapon" th:value="${soldier.soldierWeapon}"><br/>
+    <input type="submit" value="修改">
+</form>
+</body>
+</html>
