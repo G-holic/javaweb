@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<ul id="citys">
+    <li>北京</li>
+    <li>深圳</li>
+    <li>上海</li>
+    <li id="wh">武汉</li>
+    <li>西安</li>
+</ul>
+<input type="button" value="按钮" id="btn01">
+<script>
+    document.getElementById("btn01").onclick = function () {
+        // 1.新建一个校区（乌克兰）
+        var li = document.createElement("li");// <li></li>
+        li.innerText = "乌克兰"
+
+        /*var text = document.createTextNode("乌克兰");
+        li.appendChild(text);*/
+
+        var citys = document.getElementById("citys")
+        // 追加到末尾
+        // citys.appendChild(li)
+
+        // 添加到武汉前
+        var wh = document.getElementById("wh");
+        // citys.insertBefore(li,wh)
+
+        // 替换掉武汉
+        // citys.replaceChild(li,wh)
+
+        // 删除武汉
+        wh.remove();
+    }
+</script>
+</body>
+</html>

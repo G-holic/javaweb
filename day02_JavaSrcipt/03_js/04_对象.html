@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="button" value="点我" id="btn01"/>
+<script>
+    document.getElementById("btn01").onclick=function () {
+        //创建了一个js对象
+        var obj01=new Object();
+        console.log(typeof obj01);
+        obj01.id=101;
+        obj01.name="张三";
+        obj01.abc="北京";
+        console.log(obj01.id)
+        console.log(obj01.name)
+        console.log(obj01.abc)
+        console.log(obj01.age)
+        obj01.eat=function () {
+            alert(this.name+"在eat");
+        }
+        obj01.run=function () {
+            alert("跑步");
+        }
+
+        obj01.eat()
+        obj01.run()
+
+        //2. 通过{}创建js对象
+        var obj02={
+            id:102,
+            name:"李四",
+            age:18,
+            eat:function () {
+                alert("eat")
+            },
+            run:function () {
+                alert("run")
+            }
+        }
+
+        console.log("--------------------")
+        console.log(obj02.id)
+        console.log(obj02.name)
+        console.log(obj02.age)
+        obj02.eat()
+    }
+</script>
+</body>
+</html>

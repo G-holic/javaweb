@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="button" value="点我" id="btn01"/>
+<script>
+    document.getElementById("btn01").onclick=function () {
+        //1. 简单json对象
+        var json01={
+            id:103,
+            name:"王五",
+            age:18,
+            address:"北京"
+        }
+        console.log(json01.id)
+        console.log(json01.name)
+        console.log(json01.age)
+        console.log(json01.address)
+        console.log("---------------------")
+        //2. 稍微复杂json对象
+        var json02={
+            id:103,
+            name:"王五",
+            age:18,
+            address:"北京",
+            computer:{
+                id:501,
+                brand:"联想",
+                price:5000,
+            }
+        }
+        console.log(json02.id)
+        console.log(json02.name)
+        console.log(json02.computer.id)
+        console.log(json02.computer.brand)
+        console.log(json02.computer.price)
+        console.log("---------------")
+        //③ 简单的json数组
+        var json03=[10,20,"java"];
+        for (var i = 0; i < json03.length; i++) {
+            console.log(json03[i])
+        }
+        console.log("-------------------------")
+        //④ 复杂数组(对象数组)
+        var json04=[{
+            id:101,
+            name:"张三",
+            age:18,
+            address:"北京"
+        },{
+            id:102,
+            name:"李四",
+            age:18,
+            address:"北京"
+        },{
+            id:103,
+            name:"王五",
+            age:18,
+            address:"北京"
+        }]
+        for (var i = 0; i < json04.length; i++) {
+            console.log(json04[i].id)
+            console.log(json04[i].name)
+        }
+        console.log("---------------------------")
+        //⑤ 复杂对象
+        var json05={
+            id:101,
+            name:"张三",
+            computers:[{
+                id:501,
+                brand:"联想",
+                price:5000,
+            },{
+                id:502,
+                brand:"华为",
+                price:6000,
+            }]
+        }
+        console.log(json05.id)
+        console.log(json05.name)
+        for (var i = 0; i < json05.computers.length; i++) {
+            console.log(json05.computers[i].id)
+            console.log(json05.computers[i].brand)
+            console.log(json05.computers[i].price)
+        }
+        //  json对象如何转成json字符串(符合json格式的字符串)
+        var str=JSON.stringify(json05);
+        console.log(str.id)
+        console.log(typeof str)
+
+        //  json字符串 转为json对象
+        var parse = JSON.parse(str);
+        console.log(parse.id)
+        console.log(typeof parse)
+
+
+    }
+</script>
+</body>
+</html>

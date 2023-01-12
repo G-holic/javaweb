@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="div01">
+    <b>这是div内容</b>
+</div>
+<p>这是p内容</p>
+<input type="text" id="username">
+<input type="button" value="获得标签体内容按钮" id="btn01">
+<input type="button" value="操作属性内容按钮" id="btn02">
+
+<script>
+    document.getElementById("btn01").onclick = function () {
+        // 1.获得div标签的标签体
+        var elementById = document.getElementById("div01");
+        var innerText = div01.innerText;
+        console.log(innerText)
+        console.log(typeof innerText)
+
+        var innerHTML = div01.innerHTML;
+        console.log(innerHTML)
+        console.log(typeof innerHTML)
+
+        // 2.修改标签体内容
+        // div01.innerText="<b>div中的新内容</b>"
+        div01.innerHTML = "<b>div中的新内容</b>"
+
+
+    }
+    document.getElementById("btn02").onclick = function () {
+        // 1. 获得用户·在文本框输入的内容
+        var username = document.getElementById("username");
+        var value = username.value;
+        console.log(value)
+        var id = username.id;
+        console.log(id)
+        var type = username.type;
+        console.log(type)
+
+        // 2.设置文本框中的内容
+        username.value = "新值";
+        username.id = "abc";
+
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="button" value="点我" id="btn01"/>
+<script>
+    document.getElementById("btn01").onclick=function () {
+        //1. 通过new关键字创建数组
+        var arrs=new Array();
+        console.log(typeof arrs)
+        //数组中添加数据
+        arrs[0]=10;
+        arrs[1]="java";
+        arrs[2]=true;
+        arrs[3]=null;
+
+        arrs.push(12);
+        arrs.push("mysql");
+        arrs.push(false);
+
+        arrs[10]=100;
+
+        arrs.reverse();
+        // arrs.splice(2,4);
+       /* 数组元素的删除
+        arrs.splice(start,count);*/
+        //取值
+        for (var i = 0; i <arrs.length; i++) {
+            console.log(arrs[i])
+        }
+
+        var str= arrs.join(",");
+        console.log(str)
+
+        var arrs01=str.split(",");
+        for (var i = 0; i < arrs01.length; i++) {
+            console.log(arrs01[i])
+        }
+
+    }
+</script>
+</body>
+</html>

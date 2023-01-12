@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+   <!-- <script>
+        window.onload = function () {
+            var btn01 = document.getElementById("btn01");
+            btn01.onclick = function () {
+                alert("你点到我了123456789");
+            }
+        }
+    </script>-->
+    <script src="script.js">
+        // 此时script标签已经引入一个js文件，那么该标签内的js代码将失效
+        alert(100); // 失效
+    </script>
+</head>
+<body>
+<input type="button" value="点我" id="btn01">
+</body>
+</html>

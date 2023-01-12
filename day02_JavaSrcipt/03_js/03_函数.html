@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="button" value="点我" id="btn01">
+<script>
+    function fun01() {
+        console.log("这是fun01函数")
+    }
+
+    function fun02(a, b, c, d) {
+        console.log("这是fun02函数" + a + b + c + d)
+        return "结束";//带着返回值结束当前函数
+
+    }
+
+    document.getElementById("btn01").onclick = function () {
+        /*// alert("警示内容");
+        var flag = confirm("确认要删除吗？");
+        // alert(flag);
+        console.log("输出内容" + flag);// 在控制台输出*/
+        var resultData = fun01();
+        console.log(resultData)
+        var result = fun02(10,'java',true,false);
+        console.log(result)
+    }
+</script>
+</body>
+</html>

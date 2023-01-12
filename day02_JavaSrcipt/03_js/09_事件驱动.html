@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function fun01(a, b) {
+            alert("调用到fun01函数" + a + b);
+            // console.log("鼠标在移动");
+            console.log(event.target);
+        }
+    </script>
+</head>
+<body>
+<input type="button" value="按钮" onclick="fun01(10,'java')">
+<input type="button" value="按钮" ondblclick="fun01(11,'java')">
+<input type="text" onchange="fun01()">
+<!--<input type="text" onblur="fun01()">-->
+<!--<input type="text"  onfocus="fun01()">-->
+<form action="" method="" onsubmit="fun01()">
+    <input type="text" name="username" onmouseup="fun01()"/>
+    <input type="submit">
+</form>
+<div style="border: 1px solid red;width: 500px;height: 500px" onmousemove="fun01()"></div>
+</body>
+</html>
