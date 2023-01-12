@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base href="/day07_Thymeleaf_war_exploded" th:href="@{/}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>admin</h1>
+<h2 th:text="${msg}">放服务器传过来的msg数据</h2>
+<input type="text" value="这是原始值" th:value="${msg}">
+<a href="" th:href="${msg}">a标签</a><br>
+上下文路径：<h2 th:text="@{/}"></h2>
+<a href="root?id=101&name=jack">RootServlet01</a>
+<a th:href="@{/root(id=101,name='jack',age=20)}">RootServlet02</a>
+</body>
+</html>
